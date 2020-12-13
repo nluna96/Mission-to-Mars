@@ -7,11 +7,62 @@
     <title>Mission to Mars</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
  </head>
+ <style>
+     h2 {
+            text-align: center;
+    }
+    
+    .button {
+        background-color: #ff0000; /* Red */
+        border: none;
+        color: white;
+        padding: 16px 32px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 4px 2px;
+        transition-duration: 0.4s;
+        cursor: pointer;
+        border-radius: 8px;
+    }
+
+    .button1 {
+        background-color: white; 
+        color: black; 
+        border: 2px solid #ff0000;
+    }
+
+    .button1:hover {
+        background-color: #ff0000;
+        color: white;
+    }
+
+    .dataframe{
+        font-family: Arial, Helvetica, sans-serif;
+        border-collapse: collapse;
+    }
+
+    .dataframe  tr:nth-child(even){background-color: #f2f2f2;}
+
+    .dataframe tr:hover {background-color: #ddd;}
+
+    .dataframe th {
+    padding-top: 14px;
+    padding-bottom: 14px;
+    text-align: center;
+    color: #000000;
+    }
+    .dataframe td {
+    text-align: center;
+    }
+
+ </style>
  <body>
     <div class="container">
         <div class="jumbotron text-center">
             <h1>Mission to Mars</h1>
-            <p><a class="btn btn-primary btn-lg" href="/scrape" role="button">Scrape New Data</a></p>
+            <p><a class="button button1" href="/scrape" role="button">Scrape New Data</a></p>
         </div>
         <!-- Mars News -->
         <div class="row" id="mars-news">
@@ -44,12 +95,12 @@
         <!--- Mars Hemispheres-->
         <div class="row" id="mars-hemispheres">
             <h2>Mars Hemispheres</h2>
-            <div class="col-md-4"></div>
-                {% for hemisphere in mars.hemisphere_data %}
-                <img src="{{ hemisphere.img_url }}" class="img-responsive" alt="Responsive image">
-                <h3>{{ hemisphere.title }}</h2>
-                {% endfor %}
+            {% for hemisphere in mars.hemisphere_data %}
+            <div class="col-md-3">
+                <img src="{{ hemisphere.img_url }}" class="img-thumbnail">
+                <h4>{{ hemisphere.title }}</h4>
             </div>
+            {% endfor %}
         </div>
     </div>
  </body>
