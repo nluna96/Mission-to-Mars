@@ -18,7 +18,8 @@ def scrape_all():
         "news_paragraph": news_paragraph,
         "featured_image": featured_image(browser),
         "facts": mars_facts(),
-        "last_modified": dt.datetime.now()
+        "last_modified": dt.datetime.now(),
+        "hemisphere_data" : hemisphere_data(browser)
     }
 
     # Stop webdriver and return data
@@ -98,6 +99,60 @@ def mars_facts():
 
     # Convert dataframe into HTML format, add bootstrap
     return df.to_html()
+
+def hemisphere_data(browser):
+
+    # 1. Use browser to visit the URL 
+    url = 'https://astrogeology.usgs.gov/search/results?q=hemisphere+enhanced&k1=target&v1=Mars'
+    browser.visit(url)
+
+
+    # 2. Create a list to hold the images and titles.
+    hemisphere_image_urls = []
+
+    # 3. Write code to retrieve the image urls and titles for each hemisphere.
+    # Parse the data
+    html = browser.html
+    hemisphere = soup(html, 'html.parser')
+
+    try:
+        #List that holds img_url and title 
+        hemisphere_links = []
+
+        #base url to the website above
+        base_url = 'https://astrogeology.usgs.gov'
+
+        link_data = hemisphere.find_all(class_="item")
+
+        #along with the base_url and link_data to create a full URL where the pages to each of the 4 images and detail descriptions live
+        #Ex: https://astrogeology.usgs.gov/search/map/Mars/Viking/cerberus_enhanced
+        for links in link_data:
+            hemisphere_links.append(base_url + links.a["href"])
+            
+            
+        #Visit these 4 pages and pull the img_url and title and append this data to hemisphere_image_urls
+        for link in hemisphere_links:
+            browser.visit(link)
+            
+            # Parse the data
+            html = browser.html
+            img_url = soup(html, 'html.parser')
+
+            link_to_image = img_url.find('div', class_="downloads")
+            title = img_url.find('h2', class_="title").text
+            
+            hemisphere_image_urls.append({
+                'img_url' : (link_to_image.a["href"]),
+                'title' : title
+            })
+
+        # 4. Print the list that holds the dictionary of each image url and title.
+        hemisphere_image_urls
+    
+    except AttributeError:
+        return None
+    
+    return hemisphere_image_urls
 
 
 if __name__ == "__main__":
